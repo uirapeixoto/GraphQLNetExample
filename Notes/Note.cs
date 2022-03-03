@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace GraphQLNetExample.Notes {
     public class Note {
         public Note (Guid id, string message) {
@@ -6,6 +8,7 @@ namespace GraphQLNetExample.Notes {
 
         }
         public Guid Id { get; set; }
+        [Required]
         public string Message { get; set; }
     }
 }

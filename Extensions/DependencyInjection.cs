@@ -1,12 +1,23 @@
 using GraphQL.MicrosoftDI;
 using GraphQL.Server;
 using GraphQL.Types;
+using GraphQLNetExample.Data;
 using GraphQLNetExample.Notes;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLNetExample.Extensions {
     public static class DependencyInjection {
-        public static void RegisterServices (this IServiceCollection services) {
+        public static void RegisterServices (this IServiceCollection services, IConfiguration configuration) {
             services.AddGraphQLConfiguration ();
+            services.AddDbContextService(configuration);
+        }
+
+        public static void AddDbContextService (this IServiceCollection services, IConfiguration configuration){
+            // Add services to the container.
+            services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("Default"));
+            });
         }
 
         public static void AddGraphQLConfiguration (this IServiceCollection services) {
