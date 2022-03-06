@@ -9,10 +9,26 @@ namespace GraphQLNetExample.Data
 
         public DataContext(DbContextOptions options) : base(options)
         {
-            if (options is null)
+            
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Note>(entity =>
             {
-                throw new ArgumentNullException(nameof(options));
-            }
+                entity.ToTable("Note");
+
+                entity.HasKey("Id");
+
+                entity.Property(e => e.Active)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                    entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+            });
         }
     }
 }
