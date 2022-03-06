@@ -28,7 +28,23 @@ app.UseHttpsRedirection ();
 
 app.UseAuthorization ();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("*")
+                   .AllowAnyHeader();
+        });
+});
+
 app.MapControllers ();
+
+app.UseHttpsRedirection();
+
+app.UseCors();
+
+app.UseAuthorization();
 
 // make sure all our schemas registered to route
 app.UseGraphQL<ISchema>();
