@@ -15,6 +15,16 @@ builder.Services.AddSwaggerGen (c => {
         Version = "v1" });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("*")
+                   .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build ();
 
 // Configure the HTTP request pipeline.
@@ -27,16 +37,6 @@ if (app.Environment.IsDevelopment ()) {
 app.UseHttpsRedirection ();
 
 app.UseAuthorization ();
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder.WithOrigins("*")
-                   .AllowAnyHeader();
-        });
-});
 
 app.MapControllers ();
 
