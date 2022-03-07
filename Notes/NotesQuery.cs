@@ -14,14 +14,26 @@ namespace GraphQLNetExample.Notes {
                 var notesContext = context.RequestServices.GetRequiredService<DataContext> ();
                 return notesContext.Notes.ToList ();
             });
-            Field<ListGraphType<NoteType>> ("note_by_id",
+            
+            Field<NoteType> ("note_by_id",
             arguments: new QueryArguments(
                 new QueryArgument<IdGraphType> { Name = "id" }
             ) ,
             resolve : context => {
                 var id = context.GetArgument<int> ("id");
                 var notesContext = context.RequestServices.GetRequiredService<DataContext> ();
-                var rs = notesContext.Notes.Where(x => x.Id == id);
+                var rs = notesContext.Notes.FirstOrDefault(x => x.Id == id);
+                return rs;
+            } );
+
+             Field<ListGraphType<NoteType>> ("note_contains_on_message",
+            arguments: new QueryArguments(
+                new QueryArgument<IdGraphType> { Name = "word" }
+            ) ,
+            resolve : context => {
+                var word = context.GetArgument<string> ("word");
+                var notesContext = context.RequestServices.GetRequiredService<DataContext> ();
+                var rs = notesContext.Notes.Where(x => x.Message.Contains(word)).ToList();
                 return rs;
             } );
         }
